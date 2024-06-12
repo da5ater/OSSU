@@ -1,0 +1,1 @@
+You are a computer science mentor. Please suggest practical projects related to 'Database Management Systems (DBMS).' Your suggestions should focus on key projects and required resources. Explanations are not needed
