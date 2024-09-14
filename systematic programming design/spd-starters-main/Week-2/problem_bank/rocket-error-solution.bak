@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname rocket-error-starter) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname rocket-error-solution) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require spd/tags)
 
 (@assignment htdd-p7)
@@ -15,9 +15,9 @@
 ;; consistent.
 
 
-;;; =================
-;;; Data Definitions: 
-;
+;; =================
+;; Data Definitions: 
+
 (@htdd RocketDescent)
 ;; RocketDescent is one of:
 ;; - Number
@@ -29,9 +29,9 @@
 (define RD3 0.5)
 (define RD4 false)
 
-;;(@dd-template-rules one-of              ;2 cases
-;;                   atomic-non-distinct ;Number
-;;                 atomic-distinct)    ;false
+(@dd-template-rules one-of              ;2 cases
+                    atomic-non-distinct ;Number
+                    atomic-distinct)    ;false
 #;
 (define (fn-for-rocket-descent rd)
   (cond [(number? rd)
@@ -46,12 +46,12 @@
 (@htdf has-landed?)
 (@signature RocketDescent -> Boolean)
 ;; produce true if rocket's descent has ended; false if it's still descending
-(check-expect (has-landed? 100) 100)
-(check-expect (has-landed? 23) 23)
-(check-expect (has-landed? 0.25) 0.25)
+(check-expect (has-landed? 100) false)
+(check-expect (has-landed? 23) false)
+(check-expect (has-landed? 0.25) false)
 (check-expect (has-landed? false) true)
 
-;(define (has-landed? r) r) ; stub
+;(define (has-landed? r) false) ; stub
 
 (@template RocketDescent)
 
