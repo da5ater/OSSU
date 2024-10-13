@@ -29,8 +29,6 @@
                         (rotate PANGLE PETAL)
                         (rotate (* 2 PANGLE) PETAL)))
 
-(* FLOWER 2)
-
 ;; ============
 ;; Data Definitions
 
@@ -47,8 +45,8 @@
 #;
 (define (fn-for-flower f)
   (... (fl-x f)
-       (fl-y f)(
-       (fl-s f))))
+       (fl-y f)
+       (fl-s f)))
 
 ;; Template rules used:
 ;; - compound: 3 fields
