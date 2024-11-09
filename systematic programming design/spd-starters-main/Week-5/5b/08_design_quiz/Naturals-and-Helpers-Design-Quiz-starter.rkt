@@ -160,18 +160,11 @@
 ;; swap first solid bubble with first bubble occurunce
 ;;assume it is > 1
 
-;(check-expect (swap "bubble" (cons "buble" empty )) (cons "bubble" (cons "bubble" empty)))
-;(check-expect (swap "solid" (cons "buble" empty)) (cons "bubble" (cons "solid" empty)))
-;(check-expect (swap "solid" (cons "buble" (cons "solid" empty))) (cons "bubble" (cons "solid" (cons "solid" empty ))))
-;(check-expect (swap "solid" (cons "buble" (cons "bubble" empty))) (cons "bubble" (cons "solid" (cons "bubble" empty ))))
-;(check-expect (swap "solid" (cons "solid" (cons "bubble" empty ))) (cons "bubble" (cons "solid" (cons "solid" empty ))))
-
-(check-expect (swap "bubble" (cons "solid" empty))
-              (cons "bubble" (cons "solid" empty)))
-(check-expect (swap "solid" (cons "bubble" empty))
-              (cons "bubble" (cons "solid" empty)))
-(check-expect (swap "solid" (cons "bubble" (cons "bubble" empty)))
-              (cons "bubble" (cons "solid" (cons "bubble" empty))))
+(check-expect (swap "bubble" (cons "bubble" empty )) (cons "bubble" (cons "bubble" empty)))
+(check-expect (swap "solid" (cons "bubble" empty)) (cons "bubble" (cons "solid" empty)))
+(check-expect (swap "solid" (cons "bubble" (cons "solid" empty))) (cons "bubble" (cons "solid" (cons "solid" empty ))))
+(check-expect (swap "solid" (cons "bubble" (cons "bubble" empty))) (cons "bubble" (cons "solid" (cons "bubble" empty ))))
+(check-expect (swap "solid" (cons "solid" (cons "bubble" empty ))) (cons "bubble" (cons "solid" (cons "solid" empty ))))
 
 ;(define (swap b l) l)
 
