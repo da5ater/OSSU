@@ -1,10 +1,13 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname Naturals-and-Helpers-Design-Quiz-starter) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 ;; SPD2-Design-Quiz-1.rkt
 
 
 ;; ======================================================================
 ;; Constants
-(define COOKIES .)
+(define COOKIES (rectangle 10 10 "solid" "red"))
 
 ;; ======================================================================
 ;; Data Definitions
@@ -53,8 +56,27 @@
                      (beside COOKIES COOKIES)
                      (beside COOKIES COOKIES COOKIES)))
 
-(define (pyramid n i) empty-image) ; stub
+;(define (pyramid n i) empty-image) ; stub
 
+(define (pyramid n img)
+  (cond [(zero? n) empty-image]
+        [else
+         (above(pyramid (sub1 n) img) (produce-img n img)  
+               )]))
+
+;; number img -> img
+;; produce a row of images
+
+(check-expect (produce-img 1 COOKIES) COOKIES)
+(check-expect (produce-img 2 COOKIES) (beside COOKIES COOKIES))
+
+;(define (produce-img n i) i)
+
+(define (produce-img n i)
+  (cond [(= n 1) i]
+        [else
+         (beside i   ; n is added because it's often useful
+                 (produce-img (sub1 n) i))]))
 
 
 ; Problem 2:
@@ -125,4 +147,38 @@
                                 (cons "bubble" (cons "bubble" empty)))))
               (cons "bubble" (cons "solid"
                                    (cons "solid" (cons "bubble" empty)))))
-(define (sink lob) empty) ; stub
+;(define (sink lob) empty) ; stub
+
+(define (sink lob)
+  (cond [(empty? lob) empty]
+        [(empty? (rest lob)) lob]
+        [else
+         (swap (first lob)
+               (sink (rest lob)))]))
+
+;; bubble lob -> lob
+;; swap first solid bubble with first bubble occurunce
+;;assume it is > 1
+
+;(check-expect (swap "bubble" (cons "buble" empty )) (cons "bubble" (cons "bubble" empty)))
+;(check-expect (swap "solid" (cons "buble" empty)) (cons "bubble" (cons "solid" empty)))
+;(check-expect (swap "solid" (cons "buble" (cons "solid" empty))) (cons "bubble" (cons "solid" (cons "solid" empty ))))
+;(check-expect (swap "solid" (cons "buble" (cons "bubble" empty))) (cons "bubble" (cons "solid" (cons "bubble" empty ))))
+;(check-expect (swap "solid" (cons "solid" (cons "bubble" empty ))) (cons "bubble" (cons "solid" (cons "solid" empty ))))
+
+(check-expect (swap "bubble" (cons "solid" empty))
+              (cons "bubble" (cons "solid" empty)))
+(check-expect (swap "solid" (cons "bubble" empty))
+              (cons "bubble" (cons "solid" empty)))
+(check-expect (swap "solid" (cons "bubble" (cons "bubble" empty)))
+              (cons "bubble" (cons "solid" (cons "bubble" empty))))
+
+;(define (swap b l) l)
+
+
+(define (swap b lob)
+  (cond [(string=? b "bubble") (cons b lob)]
+        [(string=? b "solid")
+         (cond  [(string=? (first lob) "solid") (cons b lob)]
+                [(string=? (first lob) "bubble") (cons (first lob) (cons b  (rest lob)))])]))
+
