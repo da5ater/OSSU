@@ -134,32 +134,38 @@
 (check-expect (sink empty) empty)
 (check-expect (sink (cons "bubble" (cons "solid" (cons "bubble" empty))))
               (cons "bubble" (cons "bubble" (cons "solid" empty))))
+
 (check-expect (sink (cons "solid" (cons "solid" (cons "bubble" empty))))
               (cons "bubble" (cons "solid" (cons "solid" empty))))
+
 (check-expect (sink (cons "solid" (cons "bubble" (cons "bubble" empty))))
               (cons "bubble" (cons "solid" (cons "bubble" empty))))
+
 (check-expect (sink (cons "solid" (cons "bubble" (cons "solid" empty))))
               (cons "bubble" (cons "solid" (cons "solid" empty))))
+
 (check-expect (sink (cons "bubble" (cons "solid" (cons "solid" empty))))
               (cons "bubble" (cons "solid" (cons "solid" empty))))
+
 (check-expect (sink (cons "solid"
                           (cons "solid"
                                 (cons "bubble" (cons "bubble" empty)))))
               (cons "bubble" (cons "solid"
                                    (cons "solid" (cons "bubble" empty)))))
+
 ;(define (sink lob) empty) ; stub
 
 (define (sink lob)
   (cond [(empty? lob) empty]
-        [(empty? (rest lob)) lob]
         [else
          (swap (first lob)
-               (sink (rest lob)))]))
+               (sink (rest lob)))])) ; already sunked list
 
 ;; bubble lob -> lob
 ;; swap first solid bubble with first bubble occurunce
 ;;assume it is > 1
 
+(check-expect (swap "bubble" empty) (cons "bubble" empty))
 (check-expect (swap "bubble" (cons "bubble" empty )) (cons "bubble" (cons "bubble" empty)))
 (check-expect (swap "solid" (cons "bubble" empty)) (cons "bubble" (cons "solid" empty)))
 (check-expect (swap "solid" (cons "bubble" (cons "solid" empty))) (cons "bubble" (cons "solid" (cons "solid" empty ))))
@@ -168,10 +174,11 @@
 
 ;(define (swap b l) l)
 
-
 (define (swap b lob)
-  (cond [(string=? b "bubble") (cons b lob)]
-        [(string=? b "solid")
-         (cond  [(string=? (first lob) "solid") (cons b lob)]
-                [(string=? (first lob) "bubble") (cons (first lob) (cons b  (rest lob)))])]))
+  (cond [(empty? lob) (cons b empty) ]
+        [else
+         (if (and  (string=? (first lob) "bubble") (string=? b "solid"))
+             (cons (first lob) (swap b (rest lob))) 
+              (cons b  lob ))]))
+
 
