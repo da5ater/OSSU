@@ -19,7 +19,7 @@
 
 (define HIT-RANGE 10)
 
-(define INVADE-RATE 100)
+(define INVADE-RATE 100) 
 
 (define BACKGROUND (empty-scene WIDTH HEIGHT))
 
@@ -38,7 +38,6 @@
 (define TANK-HEIGHT/2 (/ (image-height TANK) 2))
 
 (define MISSILE (ellipse 5 15 "solid" "red"))
-
 
 
 ;; Data Definitions:
@@ -78,9 +77,14 @@
 ;; interp. the invader is at (x, y) in screen coordinates
 ;;         the invader along x by dx pixels per clock tick
 
-(define I1 (make-invader 150 100 12))           ;not landed, moving right
-(define I2 (make-invader 150 HEIGHT -10))       ;exactly landed, moving left
-(define I3 (make-invader 150 (+ HEIGHT 10) 10)) ;> landed, moving right
+(define I0 (make-invader  0 0 10))           ;not landed, moving right
+(define I1 (make-invader  (+ 0 ( * INVADER-X-SPEED 10)) (+ 0 ( * INVADER-Y-SPEED 10)) 10))       ;exactly landed, moving left
+(define I2 (make-invader  10 10 10)) ;> landed, moving right
+(define I3 (make-invader  (+ 10 ( * INVADER-X-SPEED 10))  (+ 10 ( * INVADER-X-SPEED 10)) 10))
+(define I4 (make-invader  WIDTH 0 10))
+(define I5 (make-invader  (+ WIDTH ( * INVADER-X-SPEED ( - 10))) (+ 0 ( * INVADER-Y-SPEED 10)) -10))
+(define I6 (make-invader  -1 0 10))
+(define I7 (make-invader  (+ -1 ( * INVADER-X-SPEED 10)) (+ 0 ( * INVADER-Y-SPEED 10)) 10))
 
 
 #;
@@ -129,22 +133,68 @@
 ;; 
 (define (main game)
   (big-bang game                   ; game
-            (on-tick   tock)     ; game -> game
-            (to-draw   render)   ; game -> Image
-            (stop-when stop)      ; game -> Boolean
-            ))    
-
+    (on-tick   tock)     ; game -> game
+    (to-draw   render)   ; game -> Image
+    (stop-when stop)      ; game -> Boolean
+    ))    
+;;-----------------------------------------
 ;; game -> game
 ;; produce the next game phase
 ;; invaders :
-;; add new invader after INVADE-RATE at different degrees
-;; advance current x and y and dx by a const
+;; add new invader after using INVADE-RATE at different velocities ??
 
-(check-expect (tock G0) (make-game (list (make-invader 0 0 1) empty T0))
-(check-expect (tock G0) (make-game (list (make-invader 0 0 )  (make-invader 10 10 10) empty T0))
+
+;(check-expect (tock G0) (make-game (list (make-invader 0 0 1)) empty empty))
+;(check-expect (tock G0) (make-game (list (make-invader 0 0 2)  (make-invader 10 10 10)) empty empty))
 
  
-(define (tock game) G0)
+(define (tock s)
+  (add-rand-invader (update-invader (game-invaders s) ) ))
+;;------------------------------------------------------------
+;;; ++ivaders++
+
+
+;; LOI -> LOI
+;; advance all the invaders x and y by dx
+;; advance current x and y by dx
+;; if x is width or 0  nigate dx
+
+(check-expect (update-invader false) false)
+(check-expect (update-invader  (list I0)) (list I1))
+(check-expect (update-invader  (list I0 I2))
+              (list I1 I2))
+(check-expect (update-invader  (list I4 I2))
+              (list I5 I3))
+(check-expect (update-invader  (list I6 I2))
+              (list I7  I3))
+
+
+;(define (update-invader loi) false)
+
+
+(define (update-invader los)
+  (cond [(false? los) false]                   ;BASE CASE
+        [else (list (check-for-edge (first los))                 ;String
+                    (update-invader (rest los)))]))
+
+;; invader -> invader
+;; advance invader id is inbound
+; if invader-x > width (negates dx and subtract it from x
+; if invader-x < 0 (negates dx and add it to x
+
+(check-expect ( check-for-edge I0 ) I1)
+(check-expect ( check-for-edge I2 ) I3)
+(check-expect ( check-for-edge I4 ) I5)
+(check-expect ( check-for-edge I6 ) I7)
+
+;(define (check-for-edge i) I1)
+;;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+;; loi -> loi
+;; add invader at random points
+;; y = 0 but x and dx is random
+;; !!!
+
+(define (add-rand-invader loi) loi)
 
 
 ;; game -> Image

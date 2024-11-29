@@ -1,3 +1,6 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname space-invaders-starter) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/universe)
 (require 2htdp/image)
 
@@ -103,3 +106,54 @@
 (define G1 (make-game empty empty T1))
 (define G2 (make-game (list I1) (list M1) T1))
 (define G3 (make-game (list I1 I2) (list M1 M2) T1))
+
+;;----------------------
+;;ListOfInvaders is one of :
+;; - empty
+;; - (list invader ListOfInvaders)
+;; interp. a list of invaders
+
+(define LOI0 false)
+(define LOI1 (list I1 I2))
+
+#;
+(define (fn-for-los los)
+  (cond [(false? los) (...)]                   ;BASE CASE
+        [else (... (fn-for-los (first los))                 ;String
+                   (fn-for-los (rest los)))]))
+
+
+;;-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;; game -> game
+;; start the world with G0
+;; 
+(define (main game)
+  (big-bang game                   ; game
+            (on-tick   tock)     ; game -> game
+            (to-draw   render)   ; game -> Image
+            (stop-when stop)      ; game -> Boolean
+            ))    
+
+;; game -> game
+;; produce the next game phase
+;; invaders :
+;; add new invader after INVADE-RATE at different degrees ??
+;; advance current x and y by dx
+;; if x is width or 0 change nigate dx 
+
+(check-expect (tock G0) (make-game (list (make-invader 0 0 1)) empty empty))
+(check-expect (tock G0) (make-game (list (make-invader 0 0 )  (make-invader 10 10 10)) empty empty))
+
+ 
+(define (tock game) G0)
+
+
+;; game -> Image
+;; render ... 
+;; !!!
+(define (render game) ...)
+
+;; last-world? -> game
+;; use the function last-world? to check if any invader toched home teritory
+;;!!!
+(define (stop last-world?) G0)
